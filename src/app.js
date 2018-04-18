@@ -6,19 +6,60 @@ import './common/style/base.css'
 import './common/style/index.css'
 
 export default class App extends React.Component{
+    constructor() {
+        super();
+        // 初始化数据
+        this.state = {
+            todosData: []
+        };
+        // 改变this指向
+        this.handleKeyDownPost = this.handleKeyDownPost.bind(this);
+    }
+    // 添加
+    handleKeyDownPost(ev) {
+        // 判断条件
+        if (ev.keyCode !== 13) return;
+        let value = ev.target.value.trim();
+        if (value === '') return;
+
+        // 创建数据对象
+        let todo = {};
+        todo.id = new Date().getTime();
+        todo.value = value;
+        todo.hasCompleted = false;
+
+        let { todosData } = this.state;
+        todosData.push(todo);
+
+        // 更新数据
+        this.setState({
+            todosData
+        });
+
+        // 清空input
+        ev.target.value = '';
+    }
+
     render() {
+        let { handleKeyDownPost } = this;
+        let { todosData } = this.state;
+        // 遍历数据填充到列表
+        let items = todosData.map((item, index) => {
+            return (
+                <Item todo={item} key={index}/>
+            )
+        })
+
         return (
             <div>
                 <header className='header'>
                     <h1>todos</h1>
-                    <input type="text" className="new-todo"/>
+                    <input type="text" className="new-todo" onKeyDown={ handleKeyDownPost }/>
                 </header>
                 <section className="main">
                     <input type="text" className="toggle-all"/>
                     <ul className="todo-list">
-                        <Item />
-                        <Item />
-                        <Item />
+                        { items }
                     </ul>
                 </section>
                 <Footer />
