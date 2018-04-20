@@ -14,6 +14,7 @@ export default class App extends React.Component{
         };
         // 改变this指向
         this.handleKeyDownPost = this.handleKeyDownPost.bind(this);
+        this.onDestroy = this.onDestroy.bind(this);
     }
     // 添加
     handleKeyDownPost(ev) {
@@ -39,14 +40,24 @@ export default class App extends React.Component{
         // 清空input
         ev.target.value = '';
     }
+    // 单条删除
+    onDestroy(todo) {
+        let { todosData } = this.state;
+        todosData = todosData.filter((item) => {
+            return item.id !== todo.id
+        });
+        this.setState({
+            todosData
+        });
+    }
 
     render() {
-        let { handleKeyDownPost } = this;
+        let { handleKeyDownPost, onDestroy } = this;
         let { todosData } = this.state;
         // 遍历数据填充到列表
         let items = todosData.map((item, index) => {
             return (
-                <Item todo={item} key={index}/>
+                <Item todo={item} func={ onDestroy } key={index}/>
             )
         })
 

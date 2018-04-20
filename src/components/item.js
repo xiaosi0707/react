@@ -1,7 +1,11 @@
 
 export default class Item extends React.Component{
+    constructor(props) {
+        super(props)
+        console.log(props)
+    }
     render() {
-        let { todo } = this.props;
+        let { todo, func } = this.props;
         return (
             <li>
                 <div className="view">
@@ -9,7 +13,7 @@ export default class Item extends React.Component{
                     <label htmlFor="">
                         { todo.value }
                     </label>
-                    <button className="destroy"></button>
+                    <button className="destroy" onClick={event => func(todo)}></button>
                 </div>
                 <input type="text" className="edit"/>
             </li>
