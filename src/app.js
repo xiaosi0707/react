@@ -109,12 +109,35 @@ export default class App extends React.Component{
     render() {
         let { handleKeyDownPost, onDestroy, inputChange, onToggle, toggleAll } = this;
         let { todosData, inputVal } = this.state;
+        let leftCount = todosData.length; // 默认为所有的数据长度
+        let footer = null,
+            itemsBox = null;
         // 遍历数据填充到列表
         let items = todosData.map((item, index) => {
+            if (item.hasCompleted) leftCount--; // 每选中一个就减少一个
             return (
                 <Item todo={item} func={ onDestroy } key={index} func1={ onToggle }/>
             )
         })
+
+        if (todosData.length) {
+            itemsBox = (
+                <section className="main">
+                    <input type="checkbox" className="toggle-all" onClick={toggleAll} checked={ leftCount === 0 }/>
+                    <ul className="todo-list">
+                        { items }
+                    </ul>
+                </section>
+            );
+            footer = (<Footer
+                {
+                    ...{
+                        leftCount,
+                        showClearBtn: leftCount < todosData.length
+                    }
+                }
+            />)
+        }
 
         return (
             <div>
@@ -132,13 +155,8 @@ export default class App extends React.Component{
                         */}
                     <input type="text" className="new-todo" onKeyDown={ handleKeyDownPost } value={ inputVal } onChange={ inputChange }/>
                 </header>
-                <section className="main">
-                    <input type="checkbox" className="toggle-all" onClick={toggleAll}/>
-                    <ul className="todo-list">
-                        { items }
-                    </ul>
-                </section>
-                <Footer />
+                { itemsBox }
+                { footer }
             </div>
         )
     }

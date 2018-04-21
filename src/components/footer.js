@@ -1,9 +1,19 @@
 export default class Footer extends React.Component{
+    constructor(props) {
+        super(props);
+    }
     render() {
+        let { leftCount, showClearBtn } = this.props;
+        let clearBtn = null;
+        if (showClearBtn) clearBtn = (
+            <button className="clear-completed">
+                clear all completed
+            </button>
+        )
         return (
             <footer className="footer">
                 <span className="todo-count">
-                    <strong>{0}</strong>
+                    <strong>{ leftCount }</strong>
                     <span>item left</span>
                 </span>
                 <ul className="filters">
@@ -17,9 +27,7 @@ export default class Footer extends React.Component{
                         <a href="jvascript:;">Completed</a>
                     </li>
                 </ul>
-                <button className="clear-completed">
-                    clear all completed
-                </button>
+                { clearBtn }
             </footer>
         )
     }
