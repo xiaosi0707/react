@@ -5,11 +5,11 @@ export default class Item extends React.Component{
         console.log(props)
     }
     render() {
-        let { todo, func } = this.props;
+        let { todo, func, func1 } = this.props;
         return (
             <li>
                 <div className="view">
-                    <input type="text" className="toggle"/>
+                    <input type="checkbox" className="toggle" checked={todo.hasCompleted} onClick={event => func1(todo)}/>
                     <label htmlFor="">
                         { todo.value }
                     </label>

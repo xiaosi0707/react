@@ -17,6 +17,8 @@ export default class App extends React.Component{
         this.handleKeyDownPost = this.handleKeyDownPost.bind(this);
         this.onDestroy = this.onDestroy.bind(this);
         this.inputChange = this.inputChange.bind(this);
+        this.toggleAll = this.toggleAll.bind(this);
+        this.onToggle = this.onToggle.bind(this);
     }
     // 添加
     handleKeyDownPost(ev) {
@@ -72,18 +74,45 @@ export default class App extends React.Component{
 
     // input改值
     inputChange(ev) {
-        console.log(ev)
         this.setState({
             inputVal: ev.target.value
         })
     }
+    // 全选状态
+    toggleAll(ev) {
+        let { checked } = ev.target;
+        let { todosData } = this.state;
+        todosData = todosData.map((item) => {
+            item.hasCompleted = checked;
+            return item;
+        });
+        this.setState({
+            todosData
+        })
+    }
+
+    // 单个状态
+    onToggle(todo) {
+
+        let { todosData } = this.state;
+        todosData = todosData.map((item) => {
+            console.log(item.id === todo.id);
+            if (todo.id === item.id) {
+                item.hasCompleted = !item.hasCompleted
+            }
+            return item
+        });
+        this.setState({
+            todosData
+        })
+    }
     render() {
-        let { handleKeyDownPost, onDestroy, inputChange } = this;
+        let { handleKeyDownPost, onDestroy, inputChange, onToggle, toggleAll } = this;
         let { todosData, inputVal } = this.state;
         // 遍历数据填充到列表
         let items = todosData.map((item, index) => {
             return (
-                <Item todo={item} func={ onDestroy } key={index}/>
+                <Item todo={item} func={ onDestroy } key={index} func1={ onToggle }/>
             )
         })
 
@@ -104,7 +133,7 @@ export default class App extends React.Component{
                     <input type="text" className="new-todo" onKeyDown={ handleKeyDownPost } value={ inputVal } onChange={ inputChange }/>
                 </header>
                 <section className="main">
-                    <input type="text" className="toggle-all"/>
+                    <input type="checkbox" className="toggle-all" onClick={toggleAll}/>
                     <ul className="todo-list">
                         { items }
                     </ul>
