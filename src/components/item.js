@@ -2,20 +2,23 @@
 export default class Item extends React.Component{
     constructor(props) {
         super(props)
+        console.log(props);
         this.state = {
-            inEdit: false
+            inEdit: false,
+            val: ''
         };
         this.onEdit = this.onEdit.bind(this);
     }
     onEdit() {
-        console.log(1);
+        let { value } = this.props.todo;
         this.setState({
-            inEdit: true
+            inEdit: true,
+            val: value
         })
     }
     render() {
         let { todo, func, func1 } = this.props;
-        let { inEdit } = this.state;
+        let { inEdit, val } = this.state;
         let { onEdit } = this;
         let itemClassName = '';
         if (inEdit) itemClassName = 'editing';
@@ -28,7 +31,7 @@ export default class Item extends React.Component{
                     </label>
                     <button className="destroy" onClick={event => func(todo)}></button>
                 </div>
-                <input type="text" className="edit"/>
+                <input type="text" className="edit" value={val}/>
             </li>
         )
     }
