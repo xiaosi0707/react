@@ -3,7 +3,8 @@ export default class Footer extends React.Component{
         super(props);
     }
     render() {
-        let { leftCount, showClearBtn } = this.props;
+        console.log(this.props);
+        let { leftCount, showClearBtn, view, changeView } = this.props;
         let clearBtn = null;
         if (showClearBtn) clearBtn = (
             <button className="clear-completed">
@@ -18,13 +19,13 @@ export default class Footer extends React.Component{
                 </span>
                 <ul className="filters">
                     <li>
-                        <a href="jvascript:;">All</a>
+                        <a href="jvascript:;" onClick={ event => changeView('all') } className={ view === 'all' ? 'selected' : ''}>All</a>
                     </li>
                     <li>
-                        <a href="jvascript:;">Active</a>
+                        <a href="jvascript:;" onClick={ event => changeView('active') } className={ view === 'active' ? 'selected' : ''}>Active</a>
                     </li>
                     <li>
-                        <a href="jvascript:;">Completed</a>
+                        <a href="jvascript:;" onClick={ event => changeView('completed') } className={ view === 'completed' ? 'selected' : ''}>Completed</a>
                     </li>
                 </ul>
                 { clearBtn }

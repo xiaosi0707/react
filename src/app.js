@@ -11,7 +11,8 @@ export default class App extends React.Component{
         // 初始化数据
         this.state = {
             todosData: [],
-            inputVal: ''
+            inputVal: '',
+            view: 'all' // 视图初始值
         };
         // 改变this指向
         this.handleKeyDownPost = this.handleKeyDownPost.bind(this);
@@ -19,6 +20,7 @@ export default class App extends React.Component{
         this.inputChange = this.inputChange.bind(this);
         this.toggleAll = this.toggleAll.bind(this);
         this.onToggle = this.onToggle.bind(this);
+        this.changeView = this.changeView.bind(this);
     }
     // 添加
     handleKeyDownPost(ev) {
@@ -106,15 +108,36 @@ export default class App extends React.Component{
             todosData
         })
     }
+    // 修改视图
+    changeView(view) {
+        this.setState({
+            view
+        })
+    }
     render() {
-        let { handleKeyDownPost, onDestroy, inputChange, onToggle, toggleAll } = this;
-        let { todosData, inputVal } = this.state;
+        let { handleKeyDownPost, onDestroy, inputChange, onToggle, toggleAll, changeView } = this;
+        let { todosData, inputVal, view } = this.state;
         let leftCount = todosData.length; // 默认为所有的数据长度
-        let footer = null,
+        let items,
+            footer = null,
             itemsBox = null;
-        // 遍历数据填充到列表
-        let items = todosData.map((item, index) => {
+
+        items = todosData.filter((item) => {
             if (item.hasCompleted) leftCount--; // 每选中一个就减少一个
+            switch (view) {
+                case 'active':
+                    return !item.hasCompleted
+                break;
+                case 'completed':
+                    return item.hasCompleted
+                break;
+                default:
+                    return true;
+            }
+        })
+
+        // 遍历数据填充到列表
+        items = items.map((item, index) => {
             return (
                 <Item todo={item} func={ onDestroy } key={index} func1={ onToggle }/>
             )
@@ -133,7 +156,9 @@ export default class App extends React.Component{
                 {
                     ...{
                         leftCount,
-                        showClearBtn: leftCount < todosData.length
+                        showClearBtn: leftCount < todosData.length,
+                        view,
+                        changeView
                     }
                 }
             />)
