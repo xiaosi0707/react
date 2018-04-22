@@ -3,7 +3,6 @@ export default class Footer extends React.Component{
         super(props);
     }
     render() {
-        console.log(this.props);
         let { leftCount, showClearBtn, view, changeView } = this.props;
         let clearBtn = null;
         if (showClearBtn) clearBtn = (
