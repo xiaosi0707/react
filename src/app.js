@@ -21,6 +21,7 @@ export default class App extends React.Component{
         this.toggleAll = this.toggleAll.bind(this);
         this.onToggle = this.onToggle.bind(this);
         this.changeView = this.changeView.bind(this);
+        this.itemEditDone = this.itemEditDone.bind(this);
     }
     // 添加
     handleKeyDownPost(ev) {
@@ -114,8 +115,18 @@ export default class App extends React.Component{
             view
         })
     }
+    // 编辑保存
+    itemEditDone(todo, value) {
+        let { todosData } = this.state;
+        todosData = todosData.map((item) => {
+            if (todo.id === item.id) {
+                item.value = value
+            }
+            return item;
+        })
+    }
     render() {
-        let { handleKeyDownPost, onDestroy, inputChange, onToggle, toggleAll, changeView } = this;
+        let { handleKeyDownPost, onDestroy, inputChange, onToggle, toggleAll, changeView, itemEditDone } = this;
         let { todosData, inputVal, view } = this.state;
         let leftCount = todosData.length; // 默认为所有的数据长度
         let items,
@@ -139,7 +150,7 @@ export default class App extends React.Component{
         // 遍历数据填充到列表
         items = items.map((item, index) => {
             return (
-                <Item todo={item} func={ onDestroy } key={index} func1={ onToggle }/>
+                <Item todo={item} func={ onDestroy } key={index} func1={ onToggle } itemEditDone={itemEditDone}/>
             )
         })
 
